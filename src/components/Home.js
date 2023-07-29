@@ -2,10 +2,9 @@ import React,{useState,useEffect,useContext} from 'react';
 import Notes from './Notes';
 import NoteContext from '../context/notes/NoteContext';
 
-const host="http://localhost:8000";
+
 
 export default function Home() {
-
   const {name,fetchUserData}=useContext(NoteContext);
 
 

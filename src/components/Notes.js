@@ -11,7 +11,7 @@ export default function Notes() {
     const context = useContext(NoteContext);
     const { notes , getNotes, editNote } = context;
     useEffect(()=>{
-        if(localStorage.getItem('token')){
+        if(localStorage.getItem('inotebook_token')){
             getNotes();
         }
         else{

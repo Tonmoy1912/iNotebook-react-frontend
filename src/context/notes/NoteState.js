@@ -2,7 +2,10 @@ import NoteContext from "./NoteContext";
 import { useState } from "react";
 
 const NoteState=function(props){
-    const host="http://localhost:8000"
+    // const host=process.env.REACT_APP_BACKEND_URL;
+    // const host="http://localhost:8000";
+    const host="https://inotebookbackend-a8d5.onrender.com";
+
 
     const [notes,setNotes]=useState([]);
     const [name,setName]=useState("");
@@ -15,7 +18,7 @@ const NoteState=function(props){
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":localStorage.getItem('token')
+              "auth-token":localStorage.getItem('inotebook_token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             }
             // body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
@@ -34,7 +37,7 @@ const NoteState=function(props){
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "auth-token": localStorage.getItem('token')
+          "auth-token": localStorage.getItem('inotebook_token')
           // 'Content-Type': 'application/x-www-form-urlencoded',
         }
         // body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
@@ -55,7 +58,7 @@ const NoteState=function(props){
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":localStorage.getItem('token')
+              "auth-token":localStorage.getItem('inotebook_token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
@@ -83,7 +86,7 @@ const NoteState=function(props){
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",
-                "auth-token":localStorage.getItem('token')
+                "auth-token":localStorage.getItem('inotebook_token')
                 // 'Content-Type': 'application/x-www-form-urlencoded',
               }
             });
@@ -113,7 +116,7 @@ const NoteState=function(props){
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":localStorage.getItem('token')
+              "auth-token":localStorage.getItem('inotebook_token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header

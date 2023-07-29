@@ -4,8 +4,8 @@ import React from 'react';
 export default function About() {
 
   // const navigate=useNavigate();
-  // // console.log(localStorage.getItem("token"));
-  // if(localStorage.getItem('token')){
+  // // console.log(localStorage.getItem("inotebook_token"));
+  // if(localStorage.getItem('inotebook_token')){
   //   navigate("/login");
   //   return ;
   // }

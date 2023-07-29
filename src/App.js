@@ -13,7 +13,9 @@ import NoteState from './context/notes/NoteState';
 import Signup from './components/Signup';
 import Login from './components/Login';
 
+
 function App() {
+  // console.log(process.env.REACT_APP_BACKEND_URL);
   return (
     <>
       <NoteState>

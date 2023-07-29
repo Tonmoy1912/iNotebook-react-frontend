@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const host="http://localhost:8000";
-
+// const host=process.env.REACT_APP_BACKEND_URL;
+const host="https://inotebookbackend-a8d5.onrender.com";
 
 
 export default function Signup() {
@@ -32,7 +32,7 @@ export default function Signup() {
           // console.log(json);
           if(json.success){
             //save the auth token and redirect
-            localStorage.setItem('token',json.authtoken);
+            localStorage.setItem('inotebook_token',json.authtoken);
             // history.push("/");
             navigate('/');
             setTimeout(() => {

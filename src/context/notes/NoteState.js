@@ -5,7 +5,7 @@ const NoteState=function(props){
     const host="http://localhost:8000"
 
     const [notes,setNotes]=useState([]);
-    
+    const [name,setName]=useState("");
 
     //fectch all note
     const getNotes=async function(){
@@ -15,7 +15,7 @@ const NoteState=function(props){
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjMjNkMjM0M2JiODAwYTc0NDM2OWI5In0sImlhdCI6MTY5MDQ1Mzk4Nn0.G-BI94k26yzuc8FzrFfYvYIoJ_C0nWpG5FN_Sr5GFnw"
+              "auth-token":localStorage.getItem('token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             }
             // body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
@@ -28,6 +28,24 @@ const NoteState=function(props){
     };
 
 
+    const fetchUserData=async function(){
+      let url = `${host}/api/auth/getuser`;
+      const response = await fetch(url, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem('token')
+          // 'Content-Type': 'application/x-www-form-urlencoded',
+        }
+        // body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
+      });
+      // console.log("fetch complete");
+      // console.log(response);
+      const json = await response.json();
+      // console.log(json);
+      setName(json.name);
+    }
+
 
     //Add a note
     const addNote=async function(title,description,tag){
@@ -37,34 +55,54 @@ const NoteState=function(props){
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjMjNkMjM0M2JiODAwYTc0NDM2OWI5In0sImlhdCI6MTY5MDQ1Mzk4Nn0.G-BI94k26yzuc8FzrFfYvYIoJ_C0nWpG5FN_Sr5GFnw"
+              "auth-token":localStorage.getItem('token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
           });
           const json=await response.json(); // parses JSON response into native JavaScript objects
-          setNotes(notes.concat(json));
+          if(json.success){
+            setNotes(notes.concat(json.note));
+            setTimeout(() => {
+              alert("Note added successfully");
+            }, 500);
+          }
+          else{
+            alert("Some error occurs, note not added")
+          }
     };
 
 
     //Delete a note
     const deleteNote=async function(id){
         //TODO API CALL
-        let url=`${host}/api/notes/deletenote/${id}`;
-        const response = await fetch(url, {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-              "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjMjNkMjM0M2JiODAwYTc0NDM2OWI5In0sImlhdCI6MTY5MDQ1Mzk4Nn0.G-BI94k26yzuc8FzrFfYvYIoJ_C0nWpG5FN_Sr5GFnw"
-              // 'Content-Type': 'application/x-www-form-urlencoded',
-            }
-          });
-          const json= await response.json(); // parses JSON response into native JavaScript objects
-          // console.log(json);
-        //function for client
-        // console.log("Deleting note with id ",id);
-        // setNotes(notes.filter((note)=>{return note._id!=id}));
-        getNotes();
+        let a=window.confirm("Are you sure that you want to delete the note?");
+        if(a){
+          let url=`${host}/api/notes/deletenote/${id}`;
+          const response = await fetch(url, {
+              method: "DELETE",
+              headers: {
+                "Content-Type": "application/json",
+                "auth-token":localStorage.getItem('token')
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              }
+            });
+            const json= await response.json(); // parses JSON response into native JavaScript objects
+            // console.log(json);
+          //function for client
+          // console.log("Deleting note with id ",id);
+          // setNotes(notes.filter((note)=>{return note._id!=id}));
+          if(json.success){
+            getNotes();
+            setTimeout(() => {
+              alert(json.message);
+            }, 500);
+          }
+          else{
+            alert(json.error);
+          }
+        }
+        
     };
 
     //Edit a note
@@ -75,7 +113,7 @@ const NoteState=function(props){
             method: "PUT",
             headers: {
               "Content-Type": "application/json",
-              "auth-token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjRjMjNkMjM0M2JiODAwYTc0NDM2OWI5In0sImlhdCI6MTY5MDQ1Mzk4Nn0.G-BI94k26yzuc8FzrFfYvYIoJ_C0nWpG5FN_Sr5GFnw"
+              "auth-token":localStorage.getItem('token')
               // 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: JSON.stringify({title,description,tag}), // body data type must match "Content-Type" header
@@ -91,12 +129,21 @@ const NoteState=function(props){
         //         break;
         //     }
         // }
+        if(json.success){
           getNotes();
+          setTimeout(() => {
+            alert(json.message);
+          }, 500);
+          
+        }
+        else{
+          alert(json.error);
+        }
     };
 
 
     return (
-        <NoteContext.Provider value={{notes,addNote, deleteNote,editNote,getNotes}}>
+        <NoteContext.Provider value={{notes,addNote, deleteNote,editNote,getNotes,name,setName,fetchUserData}}>
             {props.children}
         </NoteContext.Provider>
     )

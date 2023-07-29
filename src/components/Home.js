@@ -1,16 +1,23 @@
-import React from 'react';
+import React,{useState,useEffect,useContext} from 'react';
 import Notes from './Notes';
+import NoteContext from '../context/notes/NoteContext';
 
-
+const host="http://localhost:8000";
 
 export default function Home() {
 
+  const {name,fetchUserData}=useContext(NoteContext);
+
+
+  useEffect(()=>{
+    fetchUserData();
+  },[]);
 
   return (
     <div>
-      
+      <h3 className='text-center my-3'>Hello {name}</h3>
       {/* for displaying all notes */}
-      <Notes/>
+      <Notes />
     </div>
   )
 }

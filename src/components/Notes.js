@@ -2,14 +2,22 @@ import React,{useContext,useEffect,useRef,useState} from 'react';
 import NoteContext from '../context/notes/NoteContext';
 import Noteitem from './Noteitem';
 import AddNote from './AddNote';
+import { useNavigate } from 'react-router-dom';
 
 export default function Notes() {
 
+    const navigate=useNavigate();
     const [note,setNote]=useState({id:"",title:"",description:"",tag:"default"});
     const context = useContext(NoteContext);
     const { notes , getNotes, editNote } = context;
     useEffect(()=>{
-        getNotes();
+        if(localStorage.getItem('token')){
+            getNotes();
+        }
+        else{
+            navigate("/login");
+        }
+        
     },[]);
 
     const ref=useRef(null);
@@ -24,9 +32,13 @@ export default function Notes() {
     const handleClick=function(event){
         // event.preventDefault(); 
         // console.log("Editing the note",note);
-        refClose.current.click();
-        editNote(note.id,note.title,note.description,note.tag);
-        setNote({id:"",title:"",description:"",tag:"default"});
+        let a=window.confirm("Are you sure that you want to update the note?");
+        if(a){
+            refClose.current.click();
+            editNote(note.id,note.title,note.description,note.tag);
+            setNote({id:"",title:"",description:"",tag:"default"});
+        }
+        
     };
     
 
@@ -57,15 +69,15 @@ export default function Notes() {
                     {/* form inside modal to update note */}
                     <form className='my-3'>
                         <div className="mb-3">
-                            <label htmlFor="title" className="form-label">Title</label>
+                            <label htmlFor="title" className="form-label"><strong>Title</strong></label>
                             <input type="text" className="form-control" id="etitle" name="title" aria-describedby="emailHelp" value={note.title} onChange={onChange} minLength={5} required/>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="description" className="form-label">Description</label>
+                            <label htmlFor="description" className="form-label"><strong>Description</strong></label>
                             <textarea rows="8" className="form-control" id="edescrition" name="description" value={note.description} onChange={onChange} minLength={5} required/>
                         </div>
                         <div className="mb-3">
-                            <label htmlFor="tag" className="form-label">Tag</label>
+                            <label htmlFor="tag" className="form-label"><strong>Tag</strong></label>
                             <input type="text" className="form-control" id="etag" name="tag" aria-describedby="emailHelp" value={note.tag} onChange={onChange}/>
                         </div>
                     </form>

@@ -7,7 +7,7 @@
 }
 .alert_box,
 .show_button{
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50% , -50%);
@@ -30,7 +30,8 @@
   background: #2573a7;
 }
 .background{
-  position: absolute;
+  position: fixed;
+  /* top: 0px, */
   height: 100%;
   width: 100%;
   top: 0;
@@ -43,6 +44,8 @@
   transition: all 0.3s ease;
 }
 .alert_box{
+  /* position: fixed;
+  top:0; */
   padding: 30px;
   display: flex;
   background: #fff;

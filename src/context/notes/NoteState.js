@@ -1,6 +1,7 @@
 import NoteContext from "./NoteContext";
 import { useState } from "react";
 import Loader from "../../components/Loader";
+import Modal from "../../components/Modal";
 
 const NoteState = function (props) {
   // const host=process.env.REACT_APP_BACKEND_URL;
@@ -11,6 +12,8 @@ const NoteState = function (props) {
   const [notes, setNotes] = useState([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modalFlag, setModalFlag] = useState(false);
+  const [modalVal, setModalVal] = useState({ type: "", msg: "" })
 
   //fectch all note
   const getNotes = async function () {
@@ -73,11 +76,18 @@ const NoteState = function (props) {
     if (json.success) {
       setNotes(notes.concat(json.note));
       setTimeout(() => {
-        alert("Note added successfully");
+        // alert("Note added successfully");
+        setModalFlag(true);
+        setModalVal({ type: "success", msg: "Note added successfully" })
       }, 500);
     }
     else {
-      alert("Some error occurs, note not added")
+      // alert("Some error occurs, note not added")
+      setTimeout(() => {
+        // alert("Note added successfully");
+        setModalFlag(true);
+        setModalVal({ type: "error", msg: "Some error occurs, note not added" })
+      }, 500);
     }
   };
 
@@ -106,12 +116,20 @@ const NoteState = function (props) {
         getNotes();
         setIsLoading(false);
         setTimeout(() => {
-          alert(json.message);
+          // alert(json.message);
+          setModalFlag(true);
+          setModalVal({ type: "success", msg: json.message })
         }, 500);
+
       }
       else {
         setIsLoading(false);
-        alert(json.error);
+        // alert(json.error);
+        setTimeout(() => {
+          // alert(json.message);
+          setModalFlag(true);
+          setModalVal({ type: "error", msg: json.error })
+        }, 500);
       }
     }
 
@@ -146,23 +164,29 @@ const NoteState = function (props) {
       getNotes();
       setIsLoading(false);
       setTimeout(() => {
-        alert(json.message);
+        // alert(json.message);
+        setModalFlag(true);
+        setModalVal({ type: "success", msg: json.message })
       }, 500);
 
     }
     else {
       setIsLoading(false);
-      alert(json.error);
+      // alert(json.error);
+      setModalFlag(true);
+      setModalVal({ type: "error", msg: json.error })
     }
   };
 
 
   return (
     <>
-      <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes, name, setName, fetchUserData, isLoading, setIsLoading }}>
+      <NoteContext.Provider value={{ notes, addNote, deleteNote, editNote, getNotes, name, setName, fetchUserData, isLoading, setIsLoading, setModalFlag, setModalVal }}>
         {props.children}
+        {isLoading && <Loader />}
+        {modalFlag && <Modal val={modalVal} />}
       </NoteContext.Provider>
-      {isLoading && <Loader/>}
+
       {/* <Loader></Loader> */}
     </>
   )

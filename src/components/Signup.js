@@ -11,7 +11,7 @@ const host = "https://inotebookbackend-a8d5.onrender.com";
 
 export default function Signup() {
 
-  const { setIsLoading } = useContext(NoteContext);
+  const { setIsLoading, setModalFlag, setModalVal } = useContext(NoteContext);
 
   const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
   const navigate = useNavigate();
@@ -42,12 +42,19 @@ export default function Signup() {
       // history.push("/");
       navigate('/');
       setTimeout(() => {
-        alert("Signup Successful");
+        // alert("Signup Successful");
+        setModalFlag(true);
+        setModalVal({ type: "success", msg: "Signup Successful" })
       }, 300);
 
     }
     else {
-      alert(json.error);
+
+      setTimeout(() => {
+        // alert(json.error);
+        setModalFlag(true);
+        setModalVal({ type: "error", msg:json.error  })
+      }, 300);
     }
   }
 

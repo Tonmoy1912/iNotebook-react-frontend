@@ -79,7 +79,7 @@ const NoteState = function (props) {
         // alert("Note added successfully");
         setModalFlag(true);
         setModalVal({ type: "success", msg: "Note added successfully" })
-      }, 500);
+      }, 300);
     }
     else {
       // alert("Some error occurs, note not added")
@@ -87,7 +87,7 @@ const NoteState = function (props) {
         // alert("Note added successfully");
         setModalFlag(true);
         setModalVal({ type: "error", msg: "Some error occurs, note not added" })
-      }, 500);
+      }, 300);
     }
   };
 
@@ -119,7 +119,7 @@ const NoteState = function (props) {
           // alert(json.message);
           setModalFlag(true);
           setModalVal({ type: "success", msg: json.message })
-        }, 500);
+        }, 300);
 
       }
       else {
@@ -129,7 +129,7 @@ const NoteState = function (props) {
           // alert(json.message);
           setModalFlag(true);
           setModalVal({ type: "error", msg: json.error })
-        }, 500);
+        }, 300);
       }
     }
 
@@ -167,14 +167,18 @@ const NoteState = function (props) {
         // alert(json.message);
         setModalFlag(true);
         setModalVal({ type: "success", msg: json.message })
-      }, 500);
+      }, 300);
 
     }
     else {
       setIsLoading(false);
       // alert(json.error);
-      setModalFlag(true);
+      
+      setTimeout(() => {
+        // alert(json.message);
+        setModalFlag(true);
       setModalVal({ type: "error", msg: json.error })
+      }, 300);
     }
   };
 

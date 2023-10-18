@@ -19,11 +19,14 @@ export default function Signup() {
   const handleSubmit = async function (event) {
     event.preventDefault();
     //seting the isLoading true
-    setIsLoading(true);
+    // setIsLoading(true);
     if (credentials.password != credentials.cpassword) {
-      alert("Password and Conform password doesn't match....!");
+      // alert("Password and Conform password doesn't match....!");
+      setModalFlag(true);
+      setModalVal({ type: "error", msg: "Password and Conform password doesn't match....!" })
       return;
     }
+    setIsLoading(true);
     let url = `${host}/api/auth/createuser`;
     const response = await fetch(url, {
       method: "POST",
@@ -53,7 +56,7 @@ export default function Signup() {
       setTimeout(() => {
         // alert(json.error);
         setModalFlag(true);
-        setModalVal({ type: "error", msg:json.error  })
+        setModalVal({ type: "error", msg: json.error })
       }, 300);
     }
   }

@@ -13,10 +13,12 @@
   background: #202629;
 }
 .loader-container{
-  position: relative;
+  position: fixed;
+  top: 0px;
   width: 100%;
   display: flex;
   justify-content: center;
+  /* background-color: rgb(0, 0, 0); */
 }
 .loader-container .wrapper{
   position: absolute;

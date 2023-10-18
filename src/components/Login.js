@@ -1,56 +1,62 @@
-import React,{useContext,useState} from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import NoteContext from '../context/notes/NoteContext';
 
 
 
 
 // const host=process.env.REACT_APP_BACKEND_URL;
-const host="https://inotebookbackend-a8d5.onrender.com";
+const host = "https://inotebookbackend-a8d5.onrender.com";
 
 
 
 export default function Login() {
 
+    const { setIsLoading } = useContext(NoteContext);
 
-    const [credentials,setCredentials]=useState({email:"",password:""});
+    const [credentials, setCredentials] = useState({ email: "", password: "" });
     const navigate = useNavigate();
 
-    const handleSubmit=async function(event){
+    const handleSubmit = async function (event) {
         event.preventDefault();
-        let url=`${host}/api/auth/login`;
+        //seting the isLoading true
+        setIsLoading(true);
+        let url = `${host}/api/auth/login`;
         const response = await fetch(url, {
             method: "POST",
             headers: {
-              "Content-Type": "application/json"
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(credentials), // body data type must match "Content-Type" header
-          });
-          const json=await response.json();
+        });
+        const json = await response.json();
         //   console.log(json);
-          if(json.success){
+        //set IsLoaging false
+        setIsLoading(false);
+        if (json.success) {
             //save the auth token and redirect
-            localStorage.setItem('inotebook_token',json.authtoken);
+            localStorage.setItem('inotebook_token', json.authtoken);
             // history.push("/");
             navigate('/');
             setTimeout(() => {
                 alert("Login Successful");
             }, 300);
-          }
-          else{
+        }
+        else {
             alert("Invalid credentials");
-          }
+        }
     }
 
-    const onChange=function(event){
-        setCredentials({...credentials,[event.target.name]:event.target.value});
+    const onChange = function (event) {
+        setCredentials({ ...credentials, [event.target.name]: event.target.value });
     };
 
 
     return (
         <div className='container d-flex justify-content-center my-5 '>
-            <form  onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className='border border-primary border-3 p-5'>
-                    <h1  style={{textAlign:"center",color:"#0d6efd",marginTop: "0px",marginBottom: "2.5rem"}}>Login</h1>
+                    <h1 style={{ textAlign: "center", color: "#0d6efd", marginTop: "0px", marginBottom: "2.5rem" }}>Login</h1>
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label"><strong>Email address</strong></label>
                         <input type="email" className="form-control" id="email" aria-describedby="emailHelp" name="email" onChange={onChange} />
